@@ -1,0 +1,94 @@
+---
+title: "20200411-joins_example-DR"
+author: "DR"
+date: "4/11/2020"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Hello R/Python Clubers! I was asked to share an R tip this week. After lots of mulling over and wrestling with whether my tips were common knowledge I decided to post about the elegance and flexibility of joins (which I only recently really came to appreciate). 
+
+https://dplyr.tidyverse.org/reference/join.html
+
+TL;DR: Joins are a set of functions within the dplyr package that allow you to merge and compare data frames in various configurations. They can even streamline logical processes.
+
+ 
+
+I've been working on a project lately where I wrote an initial/base script for the data and then had to make versions of that script to fit variations in the initial data formats. When I initially wrote the script I just wanted to get it working correctly, so I ended up with a few messy loops to accomplish the logic needed. I started with something like:
+
+for (i in 1:length(x$column)) {
+if (x$column[i,] == “Category 1”)) {
+                       x$othercolumn[i,] <- “tag for category 1”
+           }else{
+                       if (x$column2[i,] == “Category 2”) {
+                                   x$othercolumn[i,] <- “tag for #category 2”
+           }
+}
+
+This worked, but obviously isn’t ideal and would take up a lot of processing capacity if the data were long or there were a lot of categories.
+
+So, on my next iteration I replaced it with:
+
+tagged_data <- left_join(x, tags, by = “id”)
+
+Much cleaner and more efficient!
+
+This is a pretty simple example, but can be applied really broadly and iteratively for complex data sets as needed. (It was also just a good reminder for me to take a step back after a first draft to re-evaluate logic and optimization.)
+
+I also wrote up a quick data set that showcases a couple of the joins I like the most!
+
+load the dplyr library
+
+```{r echo= TRUE, results='hide'}
+library(dplyr)
+```
+
+initialize some dummy data
+
+```{r }
+num <- 1:8
+id1 <- as.factor(c("a", "b", "b", "c", "c", "c", "y", "z"))
+
+id2 <- as.factor(c("a", "b", "c", "d", "e"))
+col <- as.factor(c("red", "green", "blue", "yellow", "white"))
+
+df1 <- cbind.data.frame(num, id1)
+df2 <- cbind.data.frame(id2, col)
+
+print(df1)
+print(df2)
+```
+
+name the columns so the two data frames have an overlapping variable
+
+```{r }
+names(df1) <- c("num", "id")
+names(df2) <- c("id", "col")
+
+print(df1)
+print(df2)
+
+```
+
+join the data frames in a few different examples
+
+```{r }
+merged_left <- left_join(df1, df2, by = "id")
+print(merged_left)
+```
+
+```{r }
+merged_right <- right_join(df1, df2, by = "id")
+print(merged_right)
+```
+
+```{r }
+merged_inner <- inner_join(df1, df2, by = "id")
+print(merged_inner)
+```
+```{r }
+not_merged <- anti_join(merged_left, merged_right)
+print(not_merged)
+```

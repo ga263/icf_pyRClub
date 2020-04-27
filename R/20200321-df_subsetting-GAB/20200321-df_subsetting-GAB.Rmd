@@ -1,0 +1,92 @@
+---
+title: "Safe data frame subsetting"
+author: "GAB"
+date: "3/21/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Create a random data frame:
+
+```{r }
+df <- data.frame(column1 = 1:10,
+                 column2 = 1:10,
+                 column3 = 1:10,
+                 column4 = 1:10)
+print(df)
+print(is.data.frame(df))
+```
+
+TASK1: subset the first 5 rows of column2
+and column 4
+
+The typical way to do it by indexing
+```{r }
+
+df_5rows = df[1:5, c(2,4)]
+print(df_5rows)
+print(is.data.frame(df_5rows))
+```
+df_5rows is a data.frame, no problem
+
+Task2: subset the first 5 rows of only column1
+
+OPTION #1:
+
+```{r }
+
+df_column1a <- df[1:5, c(1)]
+print(df_column1a)
+print(is.data.frame(df_column1a))
+
+```
+
+df_column1a is a vector, NOT a data.frame
+
+ok maybe we can convert back to data.frame
+```{r }
+
+convert_df <- as.data.frame(df_column1a)
+print(convert_df)
+print(is.data.frame(convert_df))
+
+```
+
+but convert_df loses original column name and
+we need one additional line of code to set it:
+
+```{r }
+
+colnames(convert_df) <- c("column1")
+print(convert_df)
+print(is.data.frame(convert_df))
+
+```
+
+
+OPTION #2 (better):
+
+```{r }
+
+df_column1b <- df[1:5, c(1), drop = FALSE]
+print(df_column1b)
+print(is.data.frame(df_column1b))
+
+```
+
+df_column1b is a data.frame, no problem
+
+NOTES
+
+I) The "matrix" function has this problem as well,
+so be sure to use drop = FALSE when subsetting a
+matrix
+
+II) data.table does not have this problem
+
+III) data.table is also faster than data.frame so
+perhaps use data.table instead of data.frame when
+working with data
