@@ -1,0 +1,23 @@
+---
+title: "Debugging"
+author: "GAB"
+date: "5/16/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+How do you debug your R scripts? Maybe you insert print statements, or you break-down for loops into a non loop to run line-by-line. While these may help you successfully debug your code, they are not the most efficient. In R Studio, you could simply place "browser()" before a section of buggy code (or in a conditional statement). This will allow you to run the code line-by-line and observe environments/variables. See the code below and the following resource for more information: https://support.rstudio.com/hc/en-us/articles/205612627-Debugging-with-RStudio
+
+
+```{r }
+for (x in 1:4){
+  if (x>2){browser()}
+  print(x)
+  browser()
+  print(10*x)
+}
+```
+
