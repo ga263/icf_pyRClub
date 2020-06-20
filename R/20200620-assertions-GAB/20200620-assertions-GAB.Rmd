@@ -1,0 +1,32 @@
+---
+title: "Assertions"
+author: "GAB"
+date: "6/20/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Assume some computations generate probabilities below ..
+```{r }
+require(testit)
+
+prob_A <- 0.1
+prob_B <- 0.3
+prob_C <- 0.4
+prob_D <- 0.2
+```
+
+Asumming that the sum of probabilities should = 1, we can insert an assert statement to check that that condition is always satisfied
+```{r }
+assert("Sum of all probabilities should equal 1",
+       {
+       sum(prob_A, prob_B, prob_C, prob_D) == 1
+       })
+```
+
+rest of code...
